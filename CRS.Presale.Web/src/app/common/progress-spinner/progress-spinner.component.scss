@@ -1,0 +1,26 @@
+:host {
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+.spinner-lg {
+	height: 80px;
+	width: 80px;
+}
+
+.spinner-md {
+	height: 40px;
+	width: 40px;
+}
+
+.spinner-sm {
+	height: 30px;
+	width: 30px;
+}
+
+.infotext {
+  font-size: 12px;
+}

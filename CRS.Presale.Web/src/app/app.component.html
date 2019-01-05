@@ -1,0 +1,151 @@
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="masthead mb-4">
+    <div class="inner">
+      <h3 class="masthead-brand cursor-pointer" (click)="reload()">
+        <img class="d-block d-md-none" src="./assets/hexagon_small.png" />
+        <img class="d-none d-sm-none d-md-block" src="./assets/logo.png" />
+      </h3>
+      <nav class="nav nav-masthead justify-content-center cursor-pointer">
+        <a [ngClass]="{'active': activePage == pagePresale}" (click)="activePage = pagePresale" class="nav-link">Presale</a>
+        <a [ngClass]="{'active': activePage == pageBonus}" (click)="activePage = pageBonus" class="nav-link">Bonus</a>
+        <a [ngClass]="{'active': activePage == pageHelp}" (click)="activePage = pageHelp" class="nav-link">Help</a>
+        <span class="nodes-bought-menu-entry" *ngIf="nodesBoughtCount > 0" title="Number of bought nodes">
+          <span class="affiliate-color">
+            <i class="fas fa-layer-group"></i>
+          </span>
+          <span class="ml-2">{{nodesBoughtCount}}</span>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main role="main" class="inner cover" *ngIf="!metamaskInstalled">
+    <h1 class="cover-heading error-message">No Metamask/Web3 found - please install Metamask and reload the page</h1>
+  </main>
+
+  <main role="main" class="inner cover" *ngIf="!metamaskUnlocked">
+    <h1 class="cover-heading error-message">Please unlock Metamask and reload the page</h1>
+  </main>
+
+  <main role="main" class="inner cover" *ngIf="metamaskInstalled && metamaskUnlocked && activePage == pagePresale">
+    <h1 class="cover-heading mt-4 mb-4">Masternode Presale</h1>
+
+    <img class="d-none d-sm-none d-md-inline-block mt-4 logo" src="./assets/hexagon.png" />
+
+    <app-progress-spinner class="mt-3" *ngIf="isLoading"></app-progress-spinner>
+
+    <div class="mt-4" *ngIf="!isLoading">
+      <div *ngIf="!validAffiliateLink">
+        <h3 class="mt-4 mb-1">Current masternode price</h3>
+        <span *ngIf="affiliateBonusApplied" class="affiliate-color mr-2" title="Bonus applied!"><i class="fas fa-users"></i></span>
+        <span class="currentPrice">{{currentPrice}} ETH</span>
+        <h3 class="mt-4 mb-4" *ngIf="!isActive">
+          Masternode presale is: <span class="currentState">INACTIVE</span>
+        </h3>
+      </div>
+      <div *ngIf="isActive && !validAffiliateLink" class="mt-4">
+        <div><input [(ngModel)]="destinationAddress" class="d-inline-block form-control form-control-md address-width"
+            type="text" title="CRSX destination address e.g. CVyEPv3aAKhrzHSyvuyiiJRgPTRr1fG97u" placeholder="CRSX destination address"></div>
+        <div><a (click)="buyMasternode()" class="btn btn-md btn-secondary address-width mt-1 mb-1">BUY MASTERNODE NOW</a></div>
+      </div>
+      <div class="mt-4" *ngIf="isActive && validAffiliateLink">
+        <h3 class="mb-4 importance-color">Thank you!</h3>
+        <div class="mt-3 mb-1"><i class="fas fa-users mr-2"></i><span class="mid-size-text">Your
+            affiliate link:</span></div>
+        <div title="Click to copy" (click)="copyAffiliateLink()" class="cursor-pointer">
+          <span class="affiliate-color">{{generatedAffiliateLink}}</span><i class="far fa-clone ml-3"></i>
+        </div>
+        <h3 (click)="reload()" class="mb-4 mt-4 importance-color cursor-pointer">Buy some more nodes</h3>
+      </div>
+    </div>
+
+    <div *ngIf="referralBonusHeight > 0" class="mt-1"><i class="fas fa-users mr-1 affiliate-color"></i>Your bonus:
+      <span class="referral-bonus-amount mx-1">{{referralBonusHeight}}
+        ETH</span><i (click)="withdrawReferralBonus()" class="fas fa-share-square ml-2 cursor-pointer importance-color"
+        title="Withdraw your bonus"></i></div>
+
+    <div class="disclaimer">
+      We welcome everybody to participate in our masternode presale. Notwithstanding sales are not allowed to
+      citizens and residents of any country where there are regulations in place to prevent participation in
+      cryptocurrency related
+      activities.
+    </div>
+  </main>
+
+  <main role="main" class="inner cover" *ngIf="metamaskInstalled && metamaskUnlocked && activePage == pageBonus">
+    <h1 class="cover-heading mt-4 mb-4"><i class="fas fa-users mr-3 affiliate-color"></i>Bonus</h1>
+
+    <app-progress-spinner class="mt-3" *ngIf="isLoading"></app-progress-spinner>
+
+    <div class="referral-data-container" *ngIf="!isLoading">
+      <div *ngIf="referralBonusSum == 0">
+        <h3>Unfortunately you don't have any referrals yet.</h3>
+      </div>
+
+      <div *ngIf="referralBonusSum > 0" class="mt-1 row">
+        <div class="col-lg mt-4 mb-4">
+          <h3>Current bonus:</h3>
+          <span class="big-size-text importance-color">{{referralBonusHeight}} ETH</span>
+          <i *ngIf="referralBonusHeight > 0" (click)="withdrawReferralBonus()" class="fas fa-share-square ml-2 cursor-pointer importance-color mid-size-text"
+            title="Withdraw your bonus"></i>
+        </div>
+
+        <div class="col-lg mt-4 mb-4">
+          <h3>Overall bonus sum:</h3>
+          <span class="big-size-text importance-color">{{referralBonusSum}} ETH</span>
+        </div>
+
+        <div class="col-lg mt-4 mb-4">
+          <h3>Number of referrals:</h3>
+          <span class="big-size-text importance-color">{{numberOfReferrals}}</span>
+        </div>
+      </div>
+
+      <div *ngIf="referralBonusSum > 0" class="mt-1 row">
+        <div class="col-lg mt-4 mb-4">
+          <h3>Your direct downline:</h3>
+          <div class="mb-3" *ngFor="let child of childReferrals">
+            <i class="fas fa-user mr-1 affiliate-color"></i><span class="downline-address">{{child.address.substring(0,
+              15)}}...</span><span title="Number of referrals" class="importance-color">{{child.referralCount}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="validReferralAddress" class="mt-4 mb-4">
+        <div class="mid-size-text importance-color">Share your bonus link:</div>
+        <div title="Click to copy" (click)="copyAffiliateLink()" class="cursor-pointer">
+          <span class="affiliate-color">{{currentAccountAffiliateLink}}</span><i class="far fa-clone ml-3"></i>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <main role="main" class="inner cover" *ngIf="activePage == pageHelp">
+    <h1 class="cover-heading mt-4 mb-4"><i class="fas fa-users mr-3 affiliate-color"></i>Help</h1>
+
+    <app-progress-spinner class="mt-3" *ngIf="isLoading"></app-progress-spinner>
+
+    <div class="referral-data-container" *ngIf="!isLoading">
+      <video width="640" height="480" autoplay controls>
+        <source src="./assets/cronos_presale_explainer.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </main>
+
+  <div class="mt-4 mb-4 help cursor-pointer" *ngIf="activePage != pageHelp" (click)="activePage = pageHelp">Presale
+    video tutorial</div>
+
+  <footer class="mastfoot mt-auto">Presale gateway Copyright &copy; by Cronos CRSX
+    <div *ngIf="isOwner">
+      <a (click)="changePresaleState()" class="cursor-pointer">Toggle state&nbsp;|&nbsp;</a>
+      <input [(ngModel)]="withdrawalAmount" class="d-inline-block form-control form-control-sm price-input mr-1" type="number"
+        placeholder="Amount ETH">
+      <a (click)="withdraw()" class="cursor-pointer">Withdraw&nbsp;|&nbsp;</a>
+      <input [(ngModel)]="priceToSet" class="d-inline-block form-control form-control-sm price-input mr-1" type="number"
+        placeholder="Price ETH">
+      <a (click)="setPrice()" class="cursor-pointer">Set price</a>
+      <a>&nbsp;|&nbsp;Current discount sum (do not withdraw): {{currentDiscountSum}}</a>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,21 @@
+{
+  "name": "smart-auction",
+  "version": "0.0.1",
+  "description": "Implementation of a smart contract for auctions",
+  "scripts": {
+    "test": "truffle test ./test/smart-auction.js"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "smart",
+    "contracts",
+    "auction"
+  ],
+  "devDependencies": {
+    "dotenv": "^4.0.0",
+    "truffle-hdwallet-provider": "0.0.5",
+    "ganache-cli": "6.1.8",
+    "scrypt": "6.0.3"
+  }
+}
