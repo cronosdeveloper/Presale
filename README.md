@@ -16,6 +16,6 @@ This is the Cronos presale solution based on Ethereum smart contracts. This is o
 ## Cronos
 Please take a closer look at the Cronos project: https://cronosdeveloper.github.io/
 
-If you have any questions - please join our Discord community server: https://discord.gg/Rn8aTn9vq2CWfb
+If you have any questions - please join our Discord community server: https://discord.gg/Rn8aTn9
 
 To stay informed about the project, please follow us on Twitter: https://twitter.com/Cronos_CRSX?lang=en
