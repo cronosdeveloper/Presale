@@ -14,8 +14,8 @@ This is the Cronos presale solution based on Ethereum smart contracts. This is o
 * Infura
 
 ## Cronos
-Please take a closer look at the Cronos project: https://www.cronoscoin.online/
+Please take a closer look at the Cronos project: https://cronosdeveloper.github.io/
 
-If you have any questions - please join our Discord community server: https://discord.gg/vq2CWfb
+If you have any questions - please join our Discord community server: https://discord.gg/Rn8aTn9vq2CWfb
 
 To stay informed about the project, please follow us on Twitter: https://twitter.com/Cronos_CRSX?lang=en
